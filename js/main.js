@@ -1,5 +1,5 @@
 const search = document.getElementById("search");
-const matchList = document.getElementById("match-list")
+const matchList = document.getElementById("match-list");
 
 // Search states.json and filter it
 const searchStates = async searchText => {
@@ -8,16 +8,22 @@ const searchStates = async searchText => {
     
     // Get matches to current text input
     let matches = states.filter(state => {
-        const regex = new RegExp(`^${searchText}`, "gi")
-        return state.name.match(regex) || state.abbr.match(regex)
+        const regex = new RegExp(`^${searchText}`, "gi");
+
+        // Clears states when the characters don't match
+        if (!state.name.match(regex) || !state.abbr.match(regex)){
+            matchList.innerHTML = "";
+        }
+
+        return state.name.match(regex) || state.abbr.match(regex);
     })
 
     if(!searchText.length){
         matches = [];
-        matchList.innerHTML = ""
+        matchList.innerHTML = "";
     }
 
-    outputHTML(matches)
+    outputHTML(matches);
     //console.log(matches)
 }
 
@@ -29,8 +35,6 @@ const outputHTML = matches => {
         
         matchList.innerHTML = html;
     }
-
-    
 }
 
-search.addEventListener("input", () => searchStates(search.value))
+search.addEventListener("input", () => searchStates(search.value));
